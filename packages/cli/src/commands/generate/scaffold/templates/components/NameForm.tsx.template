@@ -62,7 +62,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
         >
           ${column.label}
         </Label>
-        <% if (column.isEnum) { %>
+        <% if (column.isEnum && !column.customFlags.includes('@rw-dropdown')) { %>
           <% if (!column.isRequired) { %>
           <div className="rw-check-radio-items">
             <${column.component}
@@ -95,6 +95,22 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
           </div>
         </div>
           <% }) %>
+        <% } else if (column.isEnum && column.customFlags.includes('@rw-dropdown')) { %>
+            <div className="rw-select-items">
+            <SelectField
+              id="${singularCamelName}-${column.name}-select"
+              name="${column.name}"
+              className="rw-input"
+              errorClassName="rw-input rw-input-error"
+            >
+            <% if (!column.isRequired) { %>
+            <option value="">None</option>
+            <% } %>
+            <% column.values?.forEach((value, i) => { %>
+            <option value="${value.name}">${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</option>
+            <% }) %>
+            </SelectField>
+          </div>
         <% } else { %>
           <${column.component}
             name="${column.name}"

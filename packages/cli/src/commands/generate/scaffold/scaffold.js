@@ -370,6 +370,13 @@ const componentFiles = async (
       listDisplayFunction: 'formatEnum',
       displayFunction: 'formatEnum',
     },
+    EnumSelect: {
+      componentName: 'SelectField',
+      defaultProp: 'defaultChecked',
+      validation: () => false,
+      listDisplayFunction: 'formatEnum',
+      displayFunction: 'formatEnum',
+    },
     EnumList: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
@@ -424,6 +431,15 @@ const componentFiles = async (
     .map((column) => {
       let validation
 
+      let customFlags = []
+      if (column.documentation) {
+        column.documentation.split(' ').forEach((documentationField) => {
+          if (documentationField.trim().startsWith('@rw-')) {
+            customFlags.push(documentationField)
+          }
+        })
+      }
+
       if (componentMetadata[column.type]?.validation) {
         validation = componentMetadata[column.type]?.validation(
           column?.isRequired
@@ -437,15 +453,10 @@ const componentFiles = async (
       const isEnum = column.kind === 'enum'
       const isList = column.isList
       const enumType = isEnum && isList ? 'EnumList' : 'Enum'
-      const metadataKey = isEnum ? enumType : column.type
+      let metadataKey = isEnum ? enumType : column.type
 
-      let customFlags = []
-      if (column.documentation) {
-        column.documentation.split(' ').forEach((documentationField) => {
-          if (documentationField.trim().startsWith('@rw-')) {
-            customFlags.push(documentationField)
-          }
-        })
+      if (customFlags.includes('@rw-dropdown')) {
+        metadataKey = 'EnumSelect'
       }
 
       return {
