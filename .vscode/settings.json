@@ -6,8 +6,8 @@
     "source.fixAll.eslint": true
   },
   "workbench.colorCustomizations": {
-    "statusBar.background": "#b85833",
-    "statusBarItem.hoverBackground": "#ce7350",
+    "statusBar.background": "#b31e14",
+    "statusBarItem.hoverBackground": "#b31e14",
     "statusBar.foreground": "#e7e7e7"
   },
   "search.exclude": {
